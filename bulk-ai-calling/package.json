@@ -1,0 +1,8 @@
+{
+  "name": "bulk-ai-calling",
+  "version": "1.0.0",
+  "description": "Bulk AI calling campaign tool (simulation mode + optional Twilio)",
+  "type": "module",
+  "scripts": { "start": "node server.js", "test": "node test.js" },
+  "engines": { "node": ">=18" }
+}

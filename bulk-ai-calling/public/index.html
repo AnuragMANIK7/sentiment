@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bulk AI Calling</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">📞 <b>BulkCall</b> AI</div>
+  <nav>
+    <button data-tab="dashboard" class="on">Dashboard</button>
+    <button data-tab="new">New campaign</button>
+    <button data-tab="campaigns">Campaigns</button>
+  </nav>
+  <span id="mode" class="pill"></span>
+</header>
+<main>
+  <section id="dashboard">
+    <div class="hero">
+      <h1>Call thousands of leads with an AI voice agent</h1>
+      <p>Upload a contact list, write your script once, and let the agent dial, talk, qualify and report back — in parallel.</p>
+      <button class="primary" data-go="new">Launch a campaign</button>
+    </div>
+    <div class="cards" id="statCards"></div>
+    <h2>Recent campaigns</h2>
+    <div id="recent" class="list"></div>
+  </section>
+
+  <section id="new" hidden>
+    <h1>New campaign</h1>
+    <div class="grid2">
+      <div class="panel">
+        <h3>1 · Contacts</h3>
+        <label class="drop" id="drop">Drop a CSV here or <u>browse</u>
+          <input type="file" id="file" accept=".csv,.txt" hidden></label>
+        <textarea id="paste" rows="4" placeholder="…or paste CSV: name,phone,company&#10;Jane Doe,+14155550123,Acme"></textarea>
+        <div class="row"><button id="sample" class="ghost">Use sample list</button>
+          <label>Default country code <input id="cc" value="1" size="3"></label></div>
+        <div id="preview"></div>
+      </div>
+      <div class="panel">
+        <h3>2 · AI agent</h3>
+        <label>Campaign name <input id="name" placeholder="Q4 renewals outreach"></label>
+        <div class="row">
+          <label>Voice <select id="voice"><option>Ava</option><option>Noah</option><option>Priya</option><option>Liam</option><option>Sofia</option></select></label>
+          <label>Language <select id="lang"><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="es-ES">Spanish</option><option value="fr-FR">French</option><option value="de-DE">German</option><option value="hi-IN">Hindi</option></select></label>
+        </div>
+        <label>Opening line <textarea id="first" rows="2">Hi {{first_name}}, this is Ava, an AI assistant calling from Acme. Do you have a minute?</textarea></label>
+        <label>Agent instructions <textarea id="script" rows="5">Goal: qualify the lead and book a 15-minute demo.
+Be friendly and concise. If the contact is busy, offer a callback. Never push after a clear "no".</textarea></label>
+        <div id="chips" class="chips"></div>
+        <div class="preview-box"><b>Preview</b><div id="render"></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>3 · Delivery</h3>
+      <div class="row">
+        <label>Parallel calls <input id="conc" type="number" min="1" max="50" value="5"></label>
+        <label>Call window <select id="win"><option value="">Anytime</option><option value="9-17">9am – 5pm</option><option value="9-20">9am – 8pm</option></select></label>
+        <label id="simwrap">Simulation speed <select id="speed"><option value="1">Realistic</option><option value="4" selected>Fast (4×)</option><option value="10">Turbo (10×)</option></select></label>
+        <label class="chk"><input type="checkbox" id="sim" checked> Simulate calls (no real dialing)</label>
+      </div>
+      <p class="muted" id="liveNote"></p>
+      <button class="primary" id="launch">Create &amp; start campaign</button>
+      <span id="err" class="err"></span>
+    </div>
+  </section>
+
+  <section id="campaigns" hidden>
+    <div id="listView">
+      <h1>Campaigns</h1>
+      <div id="all" class="list"></div>
+    </div>
+    <div id="detail" hidden></div>
+  </section>
+</main>
+<div id="modal" class="modal" hidden><div class="box"><button class="x" id="close">✕</button><div id="modalBody"></div></div></div>
+<script src="app.js"></script>
+</body>
+</html>

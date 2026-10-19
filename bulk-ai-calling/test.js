@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+process.env.DB_FILE = '/tmp/bulkcall-test.json';
+const { server, normalizePhone, renderTemplate } = await import('./server.js');
+assert.equal(normalizePhone('(415) 555-0123'), '+14155550123');
+assert.equal(normalizePhone('+44 20 7946 0958'), '+442079460958');
+assert.equal(normalizePhone('12ab'), null);
+assert.equal(renderTemplate('Hi {{first_name}}, {{x}}!', { first_name: 'Jo' }), 'Hi Jo, !');
+await new Promise((r) => server.listen(0, r));
+const base = `http://localhost:${server.address().port}/api`;
+const j = (p, o) => fetch(base + p, { headers: { 'Content-Type': 'application/json' }, ...o, body: o?.body && JSON.stringify(o.body) }).then((r) => r.json());
+const contacts = [...Array(8)].map((_, i) => ({ name: 'P' + i, phone: '+1415555010' + i }));
+contacts.push({ name: 'dup', phone: '+14155550100' }, { name: 'bad', phone: 'x' });
+const c = await j('/campaigns', { method: 'POST', body: { name: 't', contacts, simulate: true, speed: 20, concurrency: 5 } });
+assert.equal(c.stats.total, 10);
+await j(`/campaigns/${c.id}/start`, { method: 'POST' });
+for (let i = 0; i < 60; i++) { await new Promise((r) => setTimeout(r, 250)); if ((await j('/campaigns/' + c.id)).status === 'completed') break; }
+const d = await j('/campaigns/' + c.id);
+assert.equal(d.status, 'completed');
+assert.equal(d.stats.queued, 0);
+assert.equal(d.calls.filter((k) => k.outcome === 'duplicate').length, 1);
+console.log('ok', d.stats);
+process.exit(0);
