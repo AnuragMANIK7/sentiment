@@ -135,7 +135,21 @@ let lastLabel = '';
 let lastWeek = 0;
 const clockFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
 let lastSec = -1;
+// The HUD steps aside while scrolling down and returns on scroll up or when the page rests
+let lastY = 0;
+let movedAt = 0;
+function frame(y: number) {
+  const now = performance.now();
+  const dy = y - lastY;
+  if (Math.abs(dy) > 2) {
+    movedAt = now;
+    if (dy > 0 && y > 140) root.classList.add('frame-away');
+    else if (dy < 0) root.classList.remove('frame-away');
+  } else if (now - movedAt > 900) root.classList.remove('frame-away');
+  lastY = y;
+}
 function hud(y: number) {
+  frame(y);
   const mid = y + innerHeight / 2;
   const ch = chapterR.find((r) => mid >= r.a && mid < r.b);
   const wk = weekR.find((r) => mid >= r.a && mid < r.b);

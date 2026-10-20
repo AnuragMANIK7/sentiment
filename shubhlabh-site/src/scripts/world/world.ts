@@ -188,12 +188,12 @@ export function createWorld(host: HTMLElement) {
   }
   function buildRig(aspect: number) {
     const portrait = aspect < 0.85;
-    const ox = portrait ? 0 : 0.36, oy = portrait ? 0.24 : 0;
+    const ox = portrait ? 0 : 0.36, oy = portrait ? 0.4 : 0;
     const pull = portrait ? 1.5 : 1;
     const K = (cam: number[], focus: THREE.Vector3, fov: number, dx = 0, dy = 0): Key => {
       const c = new THREE.Vector3(...(cam as [number, number, number]));
       c.sub(focus).multiplyScalar(pull).add(focus);
-      return { cam: c, focus, ox: ox + (portrait ? 0 : dx), oy: oy + dy, fov: portrait ? fov + 6 : fov };
+      return { cam: c, focus, ox: ox + (portrait ? 0 : dx), oy: oy + (portrait ? 0 : dy), fov: portrait ? fov + 6 : fov };
     };
     keys = [
       K([-1.0, 1.15, 4.5], new THREE.Vector3(0.15, 0.3, 0), 34, -0.05, -0.05),
@@ -206,6 +206,12 @@ export function createWorld(host: HTMLElement) {
       K([-2.3, 2.9, -51.3], KNOT, 38, -0.02),
       K([0.4, 8.6, -64.4], FIELD.clone().add(new THREE.Vector3(0, 0, -0.4)), 40, 0.05),
     ];
+    if (portrait) {
+      // phones: the lamp sits small and high, above the hero text
+      const k0 = keys[0];
+      k0.cam.sub(k0.focus).multiplyScalar(1.25).add(k0.focus);
+      k0.oy = 0.6;
+    }
     posCurve = new THREE.CatmullRomCurve3(keys.map((k) => k.cam), false, 'centripetal');
     tgtCurve = new THREE.CatmullRomCurve3(keys.map((k) => aim(k, aspect)), false, 'centripetal');
     fovs = keys.map((k) => k.fov);
