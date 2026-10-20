@@ -80,7 +80,7 @@ export function createWorld(host: HTMLElement) {
   diya.add(new THREE.Mesh(P.diyaGeometry(mobile ? 40 : 64), brass));
   const oil = new THREE.Mesh(
     new THREE.CircleGeometry(0.43, 48),
-    new THREE.MeshStandardMaterial({ color: 0x1c0d03, roughness: 0.22, metalness: 0, envMapIntensity: 0.12 }),
+    new THREE.MeshStandardMaterial({ color: 0x0d0602, roughness: 0.55, metalness: 0, envMapIntensity: 0 }),
   );
   oil.rotation.x = -Math.PI / 2;
   oil.position.y = 0.17;

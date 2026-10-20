@@ -237,6 +237,8 @@ async function boot() {
   }
   lenis?.stop();
   const loader = $('#loader')!, count = $('#loader-count')!;
+  // a returning visitor in this session gets the quiet loader: just the counter
+  try { if (sessionStorage.getItem('sl-lit')) loader.classList.add('quick'); sessionStorage.setItem('sl-lit', '1'); } catch {}
   const shown = { p: 0 };
   let target = 0;
   let ready = false;

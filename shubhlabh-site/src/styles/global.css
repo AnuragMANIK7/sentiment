@@ -101,14 +101,16 @@ html.ink-bottom .hud__idx { color: var(--sindoor); }
   linear-gradient(currentColor, currentColor) bottom / 100% 1px no-repeat; opacity: 0.9; }
 .hud__ruler i { position: absolute; left: 0; bottom: 0; width: 2px; height: 9px; background: var(--gold); translate: calc(var(--p, 0) * (clamp(5rem, 12vw, 10rem) - 2px)) 0; }
 .hide-sm { display: inline-block; }
+.show-sm { display: none; }
 
 /* Loader: the counter sits where the chapter readout lives, then hands over */
 .loader { display: none; }
 .gl .loader { display: grid; place-items: center; position: fixed; inset: 0; z-index: 100; background: var(--ground); transition: opacity 0.7s var(--ease), visibility 0.7s; }
 .loader.done { opacity: 0; visibility: hidden; }
 .loader__mark { position: relative; font-size: clamp(4rem, 14vw, 10rem); line-height: 1.2; }
-.loader__dim { color: rgba(232, 163, 23, 0.14); }
-.loader__lit { position: absolute; inset: 0; color: var(--gold); clip-path: inset(calc(100% - var(--lp, 0) * 100%) 0 0 0); text-shadow: 0 0 40px rgba(232, 163, 23, 0.35); }
+.loader__dim { display: block; color: rgba(232, 163, 23, 0.14); }
+.loader__lit { display: block; position: absolute; inset: 0; color: var(--gold); clip-path: inset(calc(100% - var(--lp, 0) * 100%) -90px -90px -90px); text-shadow: 0 0 40px rgba(232, 163, 23, 0.35); }
+.loader.quick .loader__mark, .loader.quick .loader__line { display: none; }
 .loader__line { position: absolute; top: calc(50% + clamp(3rem, 9vw, 6.5rem)); font: 500 0.75rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .loader__foot { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 1rem; display: flex; align-items: center; gap: 1.2rem; font: 500 0.75rem var(--mono); letter-spacing: 0.08em; color: var(--gold); }
 .loader__count { font-variant-numeric: tabular-nums; }
@@ -211,7 +213,7 @@ h1 { font-size: var(--h1); }
 .status { min-height: 1.5rem; color: var(--gold-hi); font-size: 0.95rem; }
 
 /* Footer: the brand mark lit from wherever the pointer is */
-.foot { background: var(--ground); padding: 0 var(--gutter) 2.4rem; }
+.foot { background: linear-gradient(180deg, rgba(11, 8, 6, 0) 0, var(--ground) 15rem); padding: 5rem var(--gutter) 2.4rem; }
 .foot__big { font-size: clamp(4.5rem, 18vw, 18rem); line-height: 1.15; text-align: center; padding: 3rem 0 1.5rem; color: var(--gold);
   background: radial-gradient(circle at var(--mx, 50%) var(--my, 40%), #fff1cc 0, var(--gold-hi) 8%, var(--gold) 22%, #5c3d0e 58%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .foot__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-top: 1.4rem; border-top: 1px solid var(--line); font: 500 0.75rem/1.6 var(--mono); letter-spacing: 0.06em; color: var(--muted); }
@@ -220,11 +222,11 @@ h1 { font-size: var(--h1); }
 
 /* No WebGL or reduced motion: each section paints its own still version of the world */
 html:not(.gl) .st { min-height: auto; padding-top: clamp(6rem, 14vw, 10rem); padding-bottom: clamp(4rem, 10vw, 7rem); }
-html:not(.gl) .st--hero { min-height: 100svh; background: radial-gradient(ellipse 40% 45% at 74% 62%, rgba(255, 150, 40, 0.28), transparent 70%), radial-gradient(ellipse 12% 16% at 74% 58%, rgba(255, 210, 120, 0.4), transparent 70%), var(--ground); }
-html:not(.gl) [data-tone='noise'], html:not(.gl) [data-tone='structure'] { background: radial-gradient(ellipse 45% 50% at 78% 50%, rgba(232, 163, 23, 0.14), transparent 70%); }
+html:not(.gl) .st--hero { min-height: 100svh; }
+html:not(.gl) [data-still] { --fade: linear-gradient(90deg, rgba(11, 8, 6, 0.94) 0%, rgba(11, 8, 6, 0.55) 40%, rgba(11, 8, 6, 0) 64%);
+  background-color: var(--ground); background-image: var(--fade), var(--still); background-size: cover, cover; background-position: center, 68% 50%; background-repeat: no-repeat; }
+html:not(.gl) .st--enroll, html:not(.gl) .st--gain { min-height: 100svh; }
 html:not(.gl) .week { border-top: 1px solid var(--line); }
-html:not(.gl) .st--gain { background: radial-gradient(ellipse 40% 50% at 80% 40%, rgba(242, 184, 75, 0.2), transparent 70%); }
-html:not(.gl) .st--enroll { background: radial-gradient(ellipse 50% 50% at 75% 55%, rgba(255, 140, 40, 0.18), transparent 70%); }
 html:not(.gl) .hint { display: none; }
 
 @media (min-width: 52rem) {
@@ -232,7 +234,9 @@ html:not(.gl) .hint { display: none; }
   .format { grid-template-columns: repeat(4, 1fr); gap: 0 2rem; }
 }
 @media (max-width: 47.5rem) {
+  html:not(.gl) [data-still] { --fade: linear-gradient(0deg, rgba(11, 8, 6, 0.97) 0%, rgba(11, 8, 6, 0.75) 48%, rgba(11, 8, 6, 0.1) 78%); background-size: cover, auto 58%; background-position: center, 72% 0; min-height: 100svh; align-content: end; }
   .hide-sm { display: none; }
+  .show-sm { display: inline-block; }
   .hud__brand span { display: none; }
   .hud__clock { display: none; }
   .hud { padding: 0.8rem var(--gutter); }

@@ -4,7 +4,7 @@ import { site, hero, story, modules, outcomes, forYes, forNo, format, faqs, deva
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <Base immersive>
-  <section class="st st--hero" id="top" data-station="0" data-chapter="0" data-tone="lamp" aria-labelledby="hero-h">
+  <section class="st st--hero" id="top" data-station="0" data-chapter="0" data-tone="lamp" data-still style="--still: url(/stills/lamp.jpg)" aria-labelledby="hero-h">
     <div class="panel">
       <span class="mark" lang="hi">{site.devanagari}</span>
       <p class="kicker" data-scramble>Live AI course · eight weeks · evenings, India time</p>
@@ -19,7 +19,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   </section>
 
   {story.map((s, i) => (
-    <section class="st st--story" data-station={i + 1} data-chapter={i + 1} data-tone={s.key} aria-labelledby={`story-${i}`}>
+    <section class="st st--story" data-station={i + 1} data-chapter={i + 1} data-tone={s.key} data-still style={`--still: url(/stills/${s.key === 'noise' ? 'noise' : 'lattice'}.jpg)`} aria-labelledby={`story-${i}`}>
       <div class="panel">
         <p class="kicker" data-scramble>{pad(i + 2)} · {s.key === 'noise' ? 'Noise' : 'Structure'}</p>
         <h2 id={`story-${i}`} class="sweep">{s.title}</h2>
@@ -30,7 +30,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   ))}
 
   <section class="ledger" id="syllabus" data-chapter="3" aria-labelledby="syl-h">
-    <div class="st st--intro" data-station="2.6" data-tone="ledger">
+    <div class="st st--intro" data-station="2.6" data-tone="ledger" data-still style="--still: url(/stills/ledger.jpg)">
       <div class="panel">
         <p class="kicker" data-scramble>04 · The ledger</p>
         <h2 id="syl-h" class="sweep">Eight weeks, kept like a ledger.</h2>
@@ -51,7 +51,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     </ol>
   </section>
 
-  <section class="st st--gain" id="gain" data-station="11" data-chapter="4" data-tone="gain" aria-labelledby="gain-h">
+  <section class="st st--gain" id="gain" data-station="11" data-chapter="4" data-tone="gain" data-still style="--still: url(/stills/knot.jpg)" aria-labelledby="gain-h">
     <div class="panel panel--wide">
       <p class="kicker" data-scramble>05 · Gain</p>
       <h2 id="gain-h" class="sweep">Four entries in your favour.</h2>
@@ -106,7 +106,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     </div>
   </section>
 
-  <section class="st st--enroll" id="enroll" data-station="12" data-chapter="7" data-tone="field" aria-labelledby="enroll-h">
+  <section class="st st--enroll" id="enroll" data-station="12" data-chapter="7" data-tone="field" data-still style="--still: url(/stills/field.jpg)" aria-labelledby="enroll-h">
     <div class="panel">
       <p class="kicker" data-scramble>08 · First cohort</p>
       <h2 id="enroll-h" class="sweep">One lamp lights the next.</h2>

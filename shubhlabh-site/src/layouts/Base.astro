@@ -76,13 +76,14 @@ const jsonLd = {
       <nav class="hud__nav" aria-label="Primary">
         <a class="hide-sm" href={immersive ? '#syllabus' : '/#syllabus'}>Syllabus</a>
         <a class="hide-sm" href={immersive ? '#faq' : '/#faq'}>Questions</a>
+        <a class="show-sm" href={immersive ? '#syllabus' : '/#syllabus'}>Weeks</a>
         {immersive && (
           <button class="sound" id="sound" type="button" aria-pressed="false">
             <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <span class="sound__label">Sound <b>off</b></span>
           </button>
         )}
-        <a class="hud__cta" href={immersive ? '#enroll' : '/#enroll'}>Join the waitlist</a>
+        <a class="hud__cta" href={immersive ? '#enroll' : '/#enroll'}><span class="hide-sm">Join the waitlist</span><span class="show-sm">Join</span></a>
       </nav>
     </header>
     {immersive && (
