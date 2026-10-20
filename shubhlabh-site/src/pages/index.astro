@@ -1,106 +1,116 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, chapters, modules, outcomes, forYes, forNo, format, faqs } from '../data/site';
+import { site, hero, story, modules, outcomes, forYes, forNo, format, faqs, deva } from '../data/site';
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
-<Base>
-  <section class="hero" id="top" aria-label="Introduction">
-    <div class="hero__scrim" aria-hidden="true"></div>
-    {chapters.map((c, i) => (
-      <div class="hero__panel" data-panel={i}>
-        {i === 0 && <span class="hero__mark" lang="hi">{site.devanagari}</span>}
-        {i === 0 ? <h1>{c.title}</h1> : <h2>{c.title}</h2>}
-        <p>{c.body}</p>
-        {i === 0 && (
-          <div class="hero__actions">
-            <a class="btn" href="#enroll">Join the waitlist <span class="arrow" aria-hidden="true">→</span></a>
-            <a class="btn btn--ghost" href="#syllabus">Read the syllabus</a>
-          </div>
-        )}
-        {i === chapters.length - 1 && (
-          <div class="hero__actions">
-            <a class="btn" href="#enroll">Join the first cohort <span class="arrow" aria-hidden="true">→</span></a>
-          </div>
-        )}
+<Base immersive>
+  <section class="st st--hero" id="top" data-station="0" data-chapter="0" data-tone="lamp" aria-labelledby="hero-h">
+    <div class="panel">
+      <span class="mark" lang="hi">{site.devanagari}</span>
+      <p class="kicker" data-scramble>Live AI course · eight weeks · evenings, India time</p>
+      <h1 id="hero-h" class="sweep">{hero.title}</h1>
+      <p class="lede">{hero.body}</p>
+      <div class="actions">
+        <a class="btn" href="#enroll"><span>Join the waitlist</span> <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#syllabus"><span>See the eight weeks</span></a>
       </div>
-    ))}
-    <ol class="ticks" aria-hidden="true">
-      {chapters.map((c) => <li>{c.label}</li>)}
-    </ol>
-    <div class="scroll-hint" aria-hidden="true">Scroll <i></i></div>
+    </div>
+    <p class="hint" aria-hidden="true"><span class="hint__desk">Scroll to light the way</span><span class="hint__touch">Swipe up to light the way</span><i></i></p>
   </section>
 
-  <section class="paper" id="syllabus" aria-labelledby="syl-h">
-    <div class="sec-head">
-      <span class="kicker">The syllabus</span>
-      <h2 id="syl-h">Eight weeks, kept like a ledger.</h2>
-      <p>Each week ends with something you can use on Monday. Open a week to see what you will do in it.</p>
-    </div>
-    <div class="ledger">
-      {modules.map((m) => (
-        <details class="row">
-          <summary>
-            <span class="row__wk">Week {m.week}</span>
-            <span class="row__t">{m.title}<span class="row__l">{m.line}</span></span>
-            <span class="row__plus" aria-hidden="true">+</span>
-          </summary>
-          <p class="row__body">{m.detail}</p>
-        </details>
-      ))}
-    </div>
-  </section>
+  {story.map((s, i) => (
+    <section class="st st--story" data-station={i + 1} data-chapter={i + 1} data-tone={s.key} aria-labelledby={`story-${i}`}>
+      <div class="panel">
+        <p class="kicker" data-scramble>{pad(i + 2)} · {s.key === 'noise' ? 'Noise' : 'Structure'}</p>
+        <h2 id={`story-${i}`} class="sweep">{s.title}</h2>
+        <p class="lede">{s.body}</p>
+        <p class="note">{s.note}</p>
+      </div>
+    </section>
+  ))}
 
-  <section class="red" id="gain" aria-labelledby="gain-h">
-    <span class="kicker">What you keep</span>
-    <h2 id="gain-h">Four entries in your favour.</h2>
-    <ul class="entries">
-      {outcomes.map((o) => (
-        <li class="entry">
-          <span class="entry__t">{o.text}</span>
-          <span class="entry__dots" aria-hidden="true"></span>
-          <span class="entry__w">{o.when}</span>
+  <section class="ledger" id="syllabus" data-chapter="3" aria-labelledby="syl-h">
+    <div class="st st--intro" data-station="2.6" data-tone="ledger">
+      <div class="panel">
+        <p class="kicker" data-scramble>04 · The ledger</p>
+        <h2 id="syl-h" class="sweep">Eight weeks, kept like a ledger.</h2>
+        <p class="lede">Each week is one glass page. Each ends with something you can use on Monday.</p>
+      </div>
+    </div>
+    <ol class="weeks">
+      {modules.map((m, i) => (
+        <li class="st week" data-station={3 + i} data-week={m.week} data-tone="ledger">
+          <div class="panel">
+            <p class="kicker" data-scramble>Week {pad(m.week)} · <span lang="hi">सप्ताह {deva(m.week)}</span></p>
+            <h3 class="sweep">{m.title}</h3>
+            <p class="line">{m.line}</p>
+            <p class="detail">{m.detail}</p>
+          </div>
         </li>
       ))}
-    </ul>
+    </ol>
   </section>
 
-  <section class="paper" id="fit" aria-labelledby="fit-h">
-    <div class="sec-head">
-      <span class="kicker">Is it for you</span>
-      <h2 id="fit-h">Honest about who this suits.</h2>
+  <section class="st st--gain" id="gain" data-station="11" data-chapter="4" data-tone="gain" aria-labelledby="gain-h">
+    <div class="panel panel--wide">
+      <p class="kicker" data-scramble>05 · Gain</p>
+      <h2 id="gain-h" class="sweep">Four entries in your favour.</h2>
+      <ul class="entries">
+        {outcomes.map((o) => (
+          <li class="entry">
+            <span class="entry__t">{o.text}</span>
+            <span class="entry__dots" aria-hidden="true"></span>
+            <span class="entry__w">{o.when}</span>
+          </li>
+        ))}
+      </ul>
     </div>
-    <div class="split">
-      <div>
-        <h3>This course is for you if</h3>
-        <ul>{forYes.map((t) => <li>{t}</li>)}</ul>
+  </section>
+
+  <section class="paper" id="fit" data-station="11" data-chapter="5" aria-labelledby="fit-h">
+    <div class="paper__in">
+      <div class="sec-head">
+        <p class="kicker kicker--ink">06 · Fit</p>
+        <h2 id="fit-h">Honest about who this suits.</h2>
       </div>
-      <div class="no">
-        <h3>It is not for you if</h3>
-        <ul>{forNo.map((t) => <li>{t}</li>)}</ul>
+      <div class="split">
+        <div>
+          <h3>This course is for you if</h3>
+          <ul class="yes">{forYes.map((t) => <li>{t}</li>)}</ul>
+        </div>
+        <div>
+          <h3>It is not for you if</h3>
+          <ul class="no">{forNo.map((t) => <li>{t}</li>)}</ul>
+        </div>
+      </div>
+      <dl class="format">
+        {format.map((f) => (<div><dt>{f.k}</dt><dd>{f.v}</dd></div>))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="paper paper--faq" id="faq" data-station="11.3" data-chapter="6" aria-labelledby="faq-h">
+    <div class="paper__in">
+      <div class="sec-head">
+        <p class="kicker kicker--ink">07 · Questions</p>
+        <h2 id="faq-h">Before you ask.</h2>
+      </div>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
       </div>
     </div>
-    <dl class="format">
-      {format.map((f) => (<div><dt>{f.k}</dt><dd>{f.v}</dd></div>))}
-    </dl>
   </section>
 
-  <section class="paper faq" id="faq" aria-labelledby="faq-h" style="padding-top:0">
-    <div class="sec-head">
-      <span class="kicker">Questions</span>
-      <h2 id="faq-h">Before you ask.</h2>
-    </div>
-    {faqs.map((f) => (
-      <details>
-        <summary>{f.q}</summary>
-        <p>{f.a}</p>
-      </details>
-    ))}
-  </section>
-
-  <section class="enroll" id="enroll" aria-labelledby="enroll-h">
-    <div>
-      <span class="kicker" style="color:var(--gold)">First cohort</span>
-      <h2 id="enroll-h">Start the ledger with us.</h2>
-      <p>Join the waitlist. Dates and the fee go to you first, before the public announcement.</p>
+  <section class="st st--enroll" id="enroll" data-station="12" data-chapter="7" data-tone="field" aria-labelledby="enroll-h">
+    <div class="panel">
+      <p class="kicker" data-scramble>08 · First cohort</p>
+      <h2 id="enroll-h" class="sweep">One lamp lights the next.</h2>
+      <p class="lede">The first cohort is small on purpose. Join the waitlist and the dates and fee come to you before anyone else.</p>
       <form class="form" id="waitlist" novalidate>
         <div class="field">
           <label for="name">Your name</label>
@@ -114,17 +124,18 @@ import { site, chapters, modules, outcomes, forYes, forNo, format, faqs } from '
           <label for="task">One task you wish AI would do for you</label>
           <textarea id="task" name="task" rows="2"></textarea>
         </div>
-        <button class="btn" type="submit">Join the waitlist <span class="arrow" aria-hidden="true">→</span></button>
+        <button class="btn" type="submit"><span>Join the waitlist</span> <span class="arrow" aria-hidden="true">→</span></button>
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
 
-  <footer slot="footer">
-    <div class="big" lang="hi" aria-hidden="true">शुभ लाभ</div>
-    <div class="foot">
-      <span>© ShubhLabh AI Course</span>
-      <a href={`mailto:${site.email}`}>{site.email}</a>
+  <footer slot="footer" class="foot">
+    <div class="foot__big" lang="hi" aria-hidden="true">{site.devanagari}</div>
+    <div class="foot__row">
+      <span>ShubhLabh AI Course</span>
+      <span>Write to us: <a href={`mailto:${site.email}`} id="contact">{site.email}</a></span>
+      <a href="#top">Back to the lamp</a>
     </div>
   </footer>
 </Base>

@@ -10,30 +10,29 @@ export const site = {
     'An eight week live AI course for working people. Learn how models behave, automate a real task of your own, and leave with a workflow you trust.',
 };
 
-export const chapters = [
+const DEVA = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+export const deva = (n: number) => String(n).split('').map((d) => DEVA[+d]).join('');
+
+// The HUD reads these. Order is the order of the journey.
+export const chapters = ['Lamp', 'Noise', 'Structure', 'Ledger', 'Gain', 'Fit', 'Questions', 'Cohort'];
+
+export const hero = {
+  title: 'Learn AI. Keep the gain.',
+  body: 'An eight week live course for people who work for a living and want AI to do some of it.',
+};
+
+export const story = [
   {
     key: 'noise',
-    label: 'Noise',
-    title: 'Learn AI. Keep the gain.',
-    body: 'An eight week live course for people who work for a living and want AI to do some of it.',
-  },
-  {
-    key: 'pattern',
-    label: 'Pattern',
     title: 'Most of AI is noise.',
     body: 'Hype, tools that change every week, demos that never work twice. We start by taking all of that away.',
+    note: 'Week 1 starts here: how models think, and why a fluent answer can be wrong.',
   },
   {
     key: 'structure',
-    label: 'Structure',
     title: 'Under the noise is structure.',
     body: 'A model is layers of simple parts. See the layers and you can predict where it helps and where it fails.',
-  },
-  {
-    key: 'gain',
-    label: 'Gain',
-    title: 'Then you keep what you gain.',
-    body: 'By week eight, one task from your own job runs on a workflow you built and checked yourself.',
+    note: 'Weeks 1 to 4 build this picture, one layer at a time.',
   },
 ];
 
@@ -115,7 +114,7 @@ export const forNo = [
 ];
 
 export const format = [
-  { k: 'Live', v: 'Two evening sessions a week, with recordings if you miss one.' },
+  { k: 'Live', v: 'Two evening sessions a week, India time, with recordings if you miss one.' },
   { k: 'Practice', v: 'A small assignment each week, reviewed by the instructor.' },
   { k: 'Cohort', v: 'A small group, so questions get real answers.' },
   { k: 'Tools', v: 'Free tiers wherever possible. Nothing to buy before week one.' },
@@ -141,5 +140,9 @@ export const faqs = [
   {
     q: 'What if I fall behind?',
     a: 'Every session is recorded and every assignment can be handed in late. You are asked to finish the capstone, not to keep a perfect streak.',
+  },
+  {
+    q: 'What is the sound on this page?',
+    a: 'A tanpura drone, synthesised in your browser. It stays off until you turn it on with the sound button in the corner.',
   },
 ];

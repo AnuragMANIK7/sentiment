@@ -1,8 +1,8 @@
 ---
-import { site } from '../data/site';
+import { site, chapters } from '../data/site';
 import '../styles/global.css';
-interface Props { title?: string; description?: string; }
-const { title, description = site.description } = Astro.props;
+interface Props { title?: string; description?: string; immersive?: boolean; }
+const { title, description = site.description, immersive = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.short}` : `${site.name}: ${site.title}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
@@ -11,18 +11,19 @@ const jsonLd = {
   '@type': 'Course',
   name: site.name,
   description: site.description,
+  inLanguage: 'en',
   provider: { '@type': 'Organization', name: site.short, url: site.url },
 };
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-immersive={immersive ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#130e0b" />
+    <meta name="theme-color" content="#0b0806" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
@@ -32,37 +33,72 @@ const jsonLd = {
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/hanken.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/mono.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/tiro-deva.woff2" as="font" type="font/woff2" crossorigin />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
-      // Flag motion and WebGL before first paint so the pinned hero never flashes the static layout.
+      // Flags before first paint: motion, touch, and WebGL2 for the immersive page only.
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        if (matchMedia('(hover: none)').matches) d.classList.add('touch');
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         d.classList.add('motion');
+        if (!d.hasAttribute('data-immersive')) return;
+        if (navigator.connection && navigator.connection.saveData) return;
         try {
-          var c = document.createElement('canvas');
-          if (c.getContext('webgl2') || c.getContext('webgl')) d.classList.add('gl');
+          if (document.createElement('canvas').getContext('webgl2')) d.classList.add('gl', 'loading');
         } catch (e) {}
       })();
     </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div id="gl" aria-hidden="true"></div>
-    <header class="bar">
-      <a class="bar__brand" href="/">ShubhLabh <span lang="hi">शुभ लाभ</span></a>
-      <nav aria-label="Primary">
-        <a class="hide-sm" href="/#syllabus">Syllabus</a>
-        <a class="hide-sm" href="/#faq">Questions</a>
-        <a class="bar__cta" href="/#enroll">Join the waitlist</a>
+    {immersive && (
+      <>
+        <div id="gl" aria-hidden="true"></div>
+        <div class="scrim" aria-hidden="true"></div>
+        <div class="loader" id="loader" aria-hidden="true">
+          <div class="loader__mark" lang="hi">
+            <span class="loader__dim">{site.devanagari}</span>
+            <span class="loader__lit" id="loader-lit">{site.devanagari}</span>
+          </div>
+          <p class="loader__line">Lighting the lamp</p>
+          <div class="loader__foot">
+            <span class="loader__count" id="loader-count">000</span>
+            <span class="loader__bar"><i id="loader-bar"></i></span>
+          </div>
+        </div>
+      </>
+    )}
+    <header class="hud hud--top">
+      <a class="hud__brand" href={immersive ? '#top' : '/'}>ShubhLabh <span lang="hi">{site.devanagari}</span></a>
+      <nav class="hud__nav" aria-label="Primary">
+        <a class="hide-sm" href={immersive ? '#syllabus' : '/#syllabus'}>Syllabus</a>
+        <a class="hide-sm" href={immersive ? '#faq' : '/#faq'}>Questions</a>
+        {immersive && (
+          <button class="sound" id="sound" type="button" aria-pressed="false">
+            <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span class="sound__label">Sound <b>off</b></span>
+          </button>
+        )}
+        <a class="hud__cta" href={immersive ? '#enroll' : '/#enroll'}>Join the waitlist</a>
       </nav>
     </header>
+    {immersive && (
+      <div class="hud hud--bottom" aria-hidden="true">
+        <div class="hud__chapter">
+          <span class="hud__idx" id="hud-idx">01/{String(chapters.length).padStart(2, '0')}</span>
+          <span class="hud__name" id="hud-name">{chapters[0]}</span>
+        </div>
+        <div class="hud__right">
+          <span class="hud__clock" title="Live sessions run in the evening, India time">IST <span id="hud-clock">--:--:--</span></span>
+          <span class="hud__ruler"><i id="hud-mark"></i></span>
+        </div>
+      </div>
+    )}
     <main id="main" tabindex="-1"><slot /></main>
     <slot name="footer" />
-    <script>
-      import '../scripts/main';
-    </script>
+    {immersive && <script>import '../scripts/experience';</script>}
   </body>
 </html>

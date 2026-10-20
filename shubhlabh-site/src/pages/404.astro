@@ -2,12 +2,13 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Page not found">
-  <section class="hero" style="min-height:100svh;display:grid;align-content:center;padding:7rem var(--gutter)">
-    <div class="hero__panel" style="position:static;opacity:1;visibility:visible">
-      <span class="hero__mark" lang="hi">शुभ लाभ</span>
-      <h1 style="font-size:var(--step-hero)">This page is not in the ledger.</h1>
-      <p>The link may be old, or mistyped. The course is one click away.</p>
-      <div class="hero__actions"><a class="btn" href="/">Back to the course <span class="arrow" aria-hidden="true">→</span></a></div>
+  <section class="st st--hero" aria-labelledby="nf-h">
+    <div class="panel">
+      <span class="mark" lang="hi">शुभ लाभ</span>
+      <p class="kicker">Error 404 · not in the ledger</p>
+      <h1 id="nf-h">This page went out with the lamp.</h1>
+      <p class="lede">The link may be old or mistyped. The course is one click away.</p>
+      <div class="actions"><a class="btn" href="/"><span>Back to the course</span> <span class="arrow" aria-hidden="true">→</span></a></div>
     </div>
   </section>
 </Base>
