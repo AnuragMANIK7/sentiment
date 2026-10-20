@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shubhlabh.example/sitemap-index.xml

@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, chapters, modules, outcomes, forYes, forNo, format, faqs } from '../data/site';
+---
+<Base>
+  <section class="hero" id="top" aria-label="Introduction">
+    <div class="hero__scrim" aria-hidden="true"></div>
+    {chapters.map((c, i) => (
+      <div class="hero__panel" data-panel={i}>
+        {i === 0 && <span class="hero__mark" lang="hi">{site.devanagari}</span>}
+        {i === 0 ? <h1>{c.title}</h1> : <h2>{c.title}</h2>}
+        <p>{c.body}</p>
+        {i === 0 && (
+          <div class="hero__actions">
+            <a class="btn" href="#enroll">Join the waitlist <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost" href="#syllabus">Read the syllabus</a>
+          </div>
+        )}
+        {i === chapters.length - 1 && (
+          <div class="hero__actions">
+            <a class="btn" href="#enroll">Join the first cohort <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        )}
+      </div>
+    ))}
+    <ol class="ticks" aria-hidden="true">
+      {chapters.map((c) => <li>{c.label}</li>)}
+    </ol>
+    <div class="scroll-hint" aria-hidden="true">Scroll <i></i></div>
+  </section>
+
+  <section class="paper" id="syllabus" aria-labelledby="syl-h">
+    <div class="sec-head">
+      <span class="kicker">The syllabus</span>
+      <h2 id="syl-h">Eight weeks, kept like a ledger.</h2>
+      <p>Each week ends with something you can use on Monday. Open a week to see what you will do in it.</p>
+    </div>
+    <div class="ledger">
+      {modules.map((m) => (
+        <details class="row">
+          <summary>
+            <span class="row__wk">Week {m.week}</span>
+            <span class="row__t">{m.title}<span class="row__l">{m.line}</span></span>
+            <span class="row__plus" aria-hidden="true">+</span>
+          </summary>
+          <p class="row__body">{m.detail}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="red" id="gain" aria-labelledby="gain-h">
+    <span class="kicker">What you keep</span>
+    <h2 id="gain-h">Four entries in your favour.</h2>
+    <ul class="entries">
+      {outcomes.map((o) => (
+        <li class="entry">
+          <span class="entry__t">{o.text}</span>
+          <span class="entry__dots" aria-hidden="true"></span>
+          <span class="entry__w">{o.when}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="paper" id="fit" aria-labelledby="fit-h">
+    <div class="sec-head">
+      <span class="kicker">Is it for you</span>
+      <h2 id="fit-h">Honest about who this suits.</h2>
+    </div>
+    <div class="split">
+      <div>
+        <h3>This course is for you if</h3>
+        <ul>{forYes.map((t) => <li>{t}</li>)}</ul>
+      </div>
+      <div class="no">
+        <h3>It is not for you if</h3>
+        <ul>{forNo.map((t) => <li>{t}</li>)}</ul>
+      </div>
+    </div>
+    <dl class="format">
+      {format.map((f) => (<div><dt>{f.k}</dt><dd>{f.v}</dd></div>))}
+    </dl>
+  </section>
+
+  <section class="paper faq" id="faq" aria-labelledby="faq-h" style="padding-top:0">
+    <div class="sec-head">
+      <span class="kicker">Questions</span>
+      <h2 id="faq-h">Before you ask.</h2>
+    </div>
+    {faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+
+  <section class="enroll" id="enroll" aria-labelledby="enroll-h">
+    <div>
+      <span class="kicker" style="color:var(--gold)">First cohort</span>
+      <h2 id="enroll-h">Start the ledger with us.</h2>
+      <p>Join the waitlist. Dates and the fee go to you first, before the public announcement.</p>
+      <form class="form" id="waitlist" novalidate>
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="task">One task you wish AI would do for you</label>
+          <textarea id="task" name="task" rows="2"></textarea>
+        </div>
+        <button class="btn" type="submit">Join the waitlist <span class="arrow" aria-hidden="true">→</span></button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer slot="footer">
+    <div class="big" lang="hi" aria-hidden="true">शुभ लाभ</div>
+    <div class="foot">
+      <span>© ShubhLabh AI Course</span>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </footer>
+</Base>

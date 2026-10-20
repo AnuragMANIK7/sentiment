@@ -1,0 +1,68 @@
+---
+import { site } from '../data/site';
+import '../styles/global.css';
+interface Props { title?: string; description?: string; }
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title} | ${site.short}` : `${site.name}: ${site.title}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL('/og.png', Astro.site ?? site.url).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: site.name,
+  description: site.description,
+  provider: { '@type': 'Organization', name: site.short, url: site.url },
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#130e0b" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/hanken.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/tiro-deva.woff2" as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      // Flag motion and WebGL before first paint so the pinned hero never flashes the static layout.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        d.classList.add('motion');
+        try {
+          var c = document.createElement('canvas');
+          if (c.getContext('webgl2') || c.getContext('webgl')) d.classList.add('gl');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="gl" aria-hidden="true"></div>
+    <header class="bar">
+      <a class="bar__brand" href="/">ShubhLabh <span lang="hi">शुभ लाभ</span></a>
+      <nav aria-label="Primary">
+        <a class="hide-sm" href="/#syllabus">Syllabus</a>
+        <a class="hide-sm" href="/#faq">Questions</a>
+        <a class="bar__cta" href="/#enroll">Join the waitlist</a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <slot name="footer" />
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>
